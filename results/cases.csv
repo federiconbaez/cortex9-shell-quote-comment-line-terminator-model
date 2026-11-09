@@ -1,0 +1,25 @@
+id,class,version,outcome,commands,rule,diff,output_json
+p01_ghsa_example,pos,pre,EXTRA_COMMAND,2,EMIT,L41-43,"""echo ok #x 'a\nid;#'"""
+p01_ghsa_example,pos,post,THROWS,0,L41-43,L41-43,null
+p02_any_later_token,pos,pre,EXTRA_COMMAND,2,EMIT,L41-43 (L76-80),"""echo #x ok 'it'\\''s\nid;#'"""
+p02_any_later_token,pos,post,THROWS,0,L41-43,L41-43 (L76-80),null
+p03_midword_hash_then_append,pos,pre,EXTRA_COMMAND,2,EMIT,L41-43 (L81-85),"""curl http://x/ #frag 'a\nid;#'"""
+p03_midword_hash_then_append,pos,post,THROWS,0,L41-43,L41-43 (L81-85),null
+h01_cr,hardening,pre,ONE_COMMAND,1,EMIT,L41-43 (L73),"""echo #x 'a\rb'"""
+h01_cr,hardening,post,THROWS,0,L41-43,L41-43 (L73),null
+h02_u2028,hardening,pre,ONE_COMMAND,1,EMIT,L41-43 (L74),"""echo #x 'a b'"""
+h02_u2028,hardening,post,THROWS,0,L41-43,L41-43 (L74),null
+h03_u2029,hardening,pre,ONE_COMMAND,1,EMIT,L41-43 (L75),"""echo #x 'a b'"""
+h03_u2029,hardening,post,THROWS,0,L41-43,L41-43 (L75),null
+n01_newline_before_comment,neg,pre,ONE_COMMAND,1,EMIT,L87,"""echo 'a\nb' #x"""
+n01_newline_before_comment,neg,post,ONE_COMMAND,1,EMIT,L87,"""echo 'a\nb' #x"""
+n02_plain_after_comment,neg,pre,ONE_COMMAND,1,EMIT,L88,"""echo #x y"""
+n02_plain_after_comment,neg,post,ONE_COMMAND,1,EMIT,L88,"""echo #x y"""
+n03_newline_in_comment,neg,pre,THROWS,0,L48-50,L48-50,null
+n03_newline_in_comment,neg,post,THROWS,0,L48-50,L48-50,null
+n04_no_comment,neg,pre,ONE_COMMAND,1,EMIT,-,"""echo 'a\nid;#'"""
+n04_no_comment,neg,post,ONE_COMMAND,1,EMIT,-,"""echo 'a\nid;#'"""
+n05_empty_after_comment,neg,pre,ONE_COMMAND,1,EMIT,L44-45,"""echo #x ''"""
+n05_empty_after_comment,neg,post,ONE_COMMAND,1,EMIT,L44-45,"""echo #x ''"""
+n06_two_comments,neg,pre,ONE_COMMAND,1,EMIT,L51,"""echo #x ok #y"""
+n06_two_comments,neg,post,ONE_COMMAND,1,EMIT,L51,"""echo #x ok #y"""

@@ -1,0 +1,25 @@
+id	version	outcome	commands	output
+p01_ghsa_example	pre	EXTRA_COMMAND	2	"echo ok #x 'a\nid;#'"
+p01_ghsa_example	post	THROWS	0	null
+p02_any_later_token	pre	EXTRA_COMMAND	2	"echo #x ok 'it'\\''s\nid;#'"
+p02_any_later_token	post	THROWS	0	null
+p03_midword_hash_then_append	pre	EXTRA_COMMAND	2	"curl http://x/ #frag 'a\nid;#'"
+p03_midword_hash_then_append	post	THROWS	0	null
+h01_cr	pre	ONE_COMMAND	1	"echo #x 'a\rb'"
+h01_cr	post	THROWS	0	null
+h02_u2028	pre	ONE_COMMAND	1	"echo #x 'a\u2028b'"
+h02_u2028	post	THROWS	0	null
+h03_u2029	pre	ONE_COMMAND	1	"echo #x 'a\u2029b'"
+h03_u2029	post	THROWS	0	null
+n01_newline_before_comment	pre	ONE_COMMAND	1	"echo 'a\nb' #x"
+n01_newline_before_comment	post	ONE_COMMAND	1	"echo 'a\nb' #x"
+n02_plain_after_comment	pre	ONE_COMMAND	1	"echo #x y"
+n02_plain_after_comment	post	ONE_COMMAND	1	"echo #x y"
+n03_newline_in_comment	pre	THROWS	0	null
+n03_newline_in_comment	post	THROWS	0	null
+n04_no_comment	pre	ONE_COMMAND	1	"echo 'a\nid;#'"
+n04_no_comment	post	ONE_COMMAND	1	"echo 'a\nid;#'"
+n05_empty_after_comment	pre	ONE_COMMAND	1	"echo #x ''"
+n05_empty_after_comment	post	ONE_COMMAND	1	"echo #x ''"
+n06_two_comments	pre	ONE_COMMAND	1	"echo #x ok #y"
+n06_two_comments	post	ONE_COMMAND	1	"echo #x ok #y"

@@ -1,0 +1,4 @@
+class,n,pre_extra_command,post_extra_command,pre_throws,post_throws
+pos,3,3,0,0,3
+hardening,3,0,0,0,3
+neg,6,0,0,1,1

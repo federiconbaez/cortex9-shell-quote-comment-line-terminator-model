@@ -1,0 +1,29 @@
+{
+  "note": "Hand-written. Strings after a comment are inert fixtures: the model only counts commands in text and never runs a shell. 'id' is the GHSA's own harmless example command. expected = [outcome, commands, output].",
+  "cases": [
+    {"id": "p01_ghsa_example", "class": "pos", "diff": "L41-43", "tokens": ["echo", "ok", {"comment": "x"}, "a\nid;#"],
+     "expected": {"pre": ["EXTRA_COMMAND", 2, "echo ok #x 'a\nid;#'"], "post": ["THROWS", 0, null]}},
+    {"id": "p02_any_later_token", "class": "pos", "diff": "L41-43 (L76-80)", "tokens": ["echo", {"comment": "x"}, "ok", "it's\nid;#"],
+     "expected": {"pre": ["EXTRA_COMMAND", 2, "echo #x ok 'it'\\''s\nid;#'"], "post": ["THROWS", 0, null]}},
+    {"id": "p03_midword_hash_then_append", "class": "pos", "diff": "L41-43 (L81-85)", "tokens": ["curl", "http://x/", {"comment": "frag"}, "a\nid;#"],
+     "expected": {"pre": ["EXTRA_COMMAND", 2, "curl http://x/ #frag 'a\nid;#'"], "post": ["THROWS", 0, null]}},
+    {"id": "h01_cr", "class": "hardening", "diff": "L41-43 (L73)", "tokens": ["echo", {"comment": "x"}, "a\rb"],
+     "expected": {"pre": ["ONE_COMMAND", 1, "echo #x 'a\rb'"], "post": ["THROWS", 0, null]}},
+    {"id": "h02_u2028", "class": "hardening", "diff": "L41-43 (L74)", "tokens": ["echo", {"comment": "x"}, "a\u2028b"],
+     "expected": {"pre": ["ONE_COMMAND", 1, "echo #x 'a\u2028b'"], "post": ["THROWS", 0, null]}},
+    {"id": "h03_u2029", "class": "hardening", "diff": "L41-43 (L75)", "tokens": ["echo", {"comment": "x"}, "a\u2029b"],
+     "expected": {"pre": ["ONE_COMMAND", 1, "echo #x 'a\u2029b'"], "post": ["THROWS", 0, null]}},
+    {"id": "n01_newline_before_comment", "class": "neg", "diff": "L87", "tokens": ["echo", "a\nb", {"comment": "x"}],
+     "expected": {"pre": ["ONE_COMMAND", 1, "echo 'a\nb' #x"], "post": ["ONE_COMMAND", 1, "echo 'a\nb' #x"]}},
+    {"id": "n02_plain_after_comment", "class": "neg", "diff": "L88", "tokens": ["echo", {"comment": "x"}, "y"],
+     "expected": {"pre": ["ONE_COMMAND", 1, "echo #x y"], "post": ["ONE_COMMAND", 1, "echo #x y"]}},
+    {"id": "n03_newline_in_comment", "class": "neg", "diff": "L48-50", "tokens": ["echo", {"comment": "x\ny"}],
+     "expected": {"pre": ["THROWS", 0, null], "post": ["THROWS", 0, null]}},
+    {"id": "n04_no_comment", "class": "neg", "diff": "-", "tokens": ["echo", "a\nid;#"],
+     "expected": {"pre": ["ONE_COMMAND", 1, "echo 'a\nid;#'"], "post": ["ONE_COMMAND", 1, "echo 'a\nid;#'"]}},
+    {"id": "n05_empty_after_comment", "class": "neg", "diff": "L44-45", "tokens": ["echo", {"comment": "x"}, ""],
+     "expected": {"pre": ["ONE_COMMAND", 1, "echo #x ''"], "post": ["ONE_COMMAND", 1, "echo #x ''"]}},
+    {"id": "n06_two_comments", "class": "neg", "diff": "L51", "tokens": ["echo", {"comment": "x"}, "ok", {"comment": "y"}],
+     "expected": {"pre": ["ONE_COMMAND", 1, "echo #x ok #y"], "post": ["ONE_COMMAND", 1, "echo #x ok #y"]}}
+  ]
+}
